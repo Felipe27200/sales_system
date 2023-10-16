@@ -34,9 +34,8 @@ public class Product
     * can have it.
     * */
     @ManyToOne(fetch = FetchType.LAZY) // Only get the data from one table of the relationship.
-    // name property defines the name of the FK for this entity.
     @JoinColumn(
-        name = "product_id",
+        name = "category_id", // name property defines the name of the FK for this entity.
         referencedColumnName = "id", // Name of the primary key in the parent table
         nullable = false
     )
