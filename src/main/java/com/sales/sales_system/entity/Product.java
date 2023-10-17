@@ -2,6 +2,8 @@ package com.sales.sales_system.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(
     name = "products",
@@ -40,6 +42,9 @@ public class Product
         nullable = false
     )
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    private Set<Detail> details;
 
     public Product() { }
     public Product(Long id, String name, Integer price, Category category)
@@ -80,5 +85,13 @@ public class Product
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Set<Detail> getDetails() {
+        return details;
+    }
+
+    public void setDetails(Set<Detail> details) {
+        this.details = details;
     }
 }
