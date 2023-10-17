@@ -28,6 +28,10 @@ public class Category
     * child class that references the child table, so Category
     * is the parent class and table, and Product has a property
     * named category the make the relationship.
+    *
+    * This make the relationship in JPA will be bidirectional.
+    * Is both entities have the @OneToMany and @ManyToOne,
+    * respective.
     * */
     @OneToMany(mappedBy = "category")
     private List<Product> products;

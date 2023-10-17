@@ -14,6 +14,9 @@ public class Order
     @Column(name = "id")
     private Long id;
 
+    @OneToOne(mappedBy = "order")
+    private Receipt receipt;
+
     @Temporal(TemporalType.TIMESTAMP) // Define the type of the date in this case hh:mm:ss 00:00:00
     @Column(name = "date_order", nullable = false)
     private Date dateOrder;
