@@ -1,6 +1,7 @@
 package com.sales.sales_system.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
 
 import java.util.List;
 
@@ -22,9 +23,17 @@ public class Customer
     private Long document;
     @Column(name = "phone", length = 10)
     private int phone;
+    @Column(nullable = false)
+    private String password;
+    @Column(name = "user", nullable = false)
+    private String user;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
 
     public Customer() { }
 
@@ -34,6 +43,16 @@ public class Customer
         this.name = name;
         this.document = document;
         this.phone = phone;
+    }
+
+    public Customer(Long id, String name, Long document, int phone, String password, String user) {
+        this.id = id;
+        this.name = name;
+        this.document = document;
+        this.phone = phone;
+        this.password = password;
+        this.user = user;
+        this.orders = orders;
     }
 
     public Long getId() {
@@ -74,5 +93,29 @@ public class Customer
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
