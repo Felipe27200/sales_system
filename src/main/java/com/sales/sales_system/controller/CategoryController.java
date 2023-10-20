@@ -22,15 +22,36 @@ public class CategoryController
     }
 
     @GetMapping("/categories")
-    public List<Category> findAll()
+    public Response<?> findAll()
     {
-        return this.categoryService.findAll();
+        List<Category> categories = this.categoryService.findAll();
+
+        if (categories != null && !categories.isEmpty())
+            return new Response<List<Category>>(categories, "successful"); // Define the generic type as list of Category
+        else
+            return new Response<>("Category Not Found", "unsuccessful");
     }
 
     @GetMapping("/categories/{name}/name")
-    public Category findByName(@PathVariable String name)
+    public Response<?> findByName(@PathVariable String name)
     {
-        return this.categoryService.findByName(name);
+        Category category = this.categoryService.findByName(name);
+
+        if (category == null)
+            return new Response<>("Category NOT FOUND", "unsuccessful");
+        else
+            return new Response<>(category, "successful");
+    }
+
+    @GetMapping("/categories/{name}/coincidence")
+    public Response<?> findByNameCoincidence(@PathVariable String name)
+    {
+        List<Category> categories = this.categoryService.findByNameCoincidence(name);
+
+        if (categories != null && !categories.isEmpty())
+            return new Response<>(categories, "successful");
+        else
+            return new Response<>("Categories with name: '" + name + "' NOT FOUND", "unsuccessful");
     }
 
     @GetMapping("/categories/{id}")
@@ -43,25 +64,44 @@ public class CategoryController
         {
             // We have to define the type of the value to create the instance
             // of the class, in another way we can't create it.
-            Response<Category> response = new Response<>("successful");
-            response.setBody(category.get());
-
-            return response;
+            return new Response<>(category.get(), "successful");
         }
         else
         {
-            Response<String> response = new Response<>("unsuccessful");
-            response.setBody("Category Not Found");
-
-            return response;
+            return new Response<>("Category Not Found", "unsuccessful");
         }
     }
 
     @PostMapping("/categories")
-    public Category save(@RequestBody Category category)
+    public Response<?> save(@RequestBody Category category)
     {
         Category newCategory = this.categoryService.save(category);
 
-        return category;
+        if (newCategory == null)
+            return new Response<>("The category is already registered", "unsuccessful");
+        else
+            return new Response<>(newCategory, "successful");
+    }
+
+    @PutMapping("categories/{id}")
+    public Response<?> updateCategory(@RequestBody Category category, @PathVariable Long id)
+    {
+        Category updatedCategory = this.categoryService.update(category, id);
+
+        if (updatedCategory == null)
+            return new Response<>("The category doesn't exists", "unsuccessful");
+        else
+            return new Response<>(updatedCategory, "successful");
+    }
+
+    @DeleteMapping("/categories/{id}")
+    public Response<String> deleteById(@PathVariable Long id)
+    {
+        String categoryName = this.categoryService.deleteById(id);
+
+        if (categoryName.isEmpty())
+            return new Response<>("Category Not Found", "unsuccessful");
+        else
+            return new Response<>("Category: " + categoryName + " was deleted.", "successful");
     }
 }
