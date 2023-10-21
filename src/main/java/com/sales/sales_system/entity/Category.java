@@ -1,6 +1,7 @@
 package com.sales.sales_system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
@@ -16,6 +17,9 @@ public class Category
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    // Defining the required values
+    @NotBlank(message = "Name of Category is required")
     @Column(name = "name", nullable = false)
     private String name;
 

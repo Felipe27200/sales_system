@@ -3,6 +3,7 @@ package com.sales.sales_system.controller;
 import com.sales.sales_system.entity.Category;
 import com.sales.sales_system.response.Response;
 import com.sales.sales_system.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,7 +74,11 @@ public class CategoryController
     }
 
     @PostMapping("/categories")
-    public Response<?> save(@RequestBody Category category)
+    /*
+    * The @Valid annotation mark the argument as necessary to validate
+    * and the Spring validation verify its fields.
+    * */
+    public Response<?> save(@Valid @RequestBody Category category)
     {
         Category newCategory = this.categoryService.save(category);
 
@@ -84,7 +89,7 @@ public class CategoryController
     }
 
     @PutMapping("categories/{id}")
-    public Response<?> updateCategory(@RequestBody Category category, @PathVariable Long id)
+    public Response<?> updateCategory(@Valid @RequestBody Category category, @PathVariable Long id)
     {
         Category updatedCategory = this.categoryService.update(category, id);
 

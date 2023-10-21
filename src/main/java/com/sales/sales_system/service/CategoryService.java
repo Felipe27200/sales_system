@@ -1,6 +1,8 @@
 package com.sales.sales_system.service;
 
 import com.sales.sales_system.entity.Category;
+import com.sales.sales_system.error_handling.db_errors.DuplicateConstraintException;
+import com.sales.sales_system.error_handling.db_errors.NotFoundException;
 import com.sales.sales_system.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,18 @@ public class CategoryService
         Optional<Category> searchCategory = this.findById(id);
 
         if (!(searchCategory.isPresent()))
-            return null;
+        {
+            /*
+            * Make a handler exception to the fail in the search
+            * of and record in the database.
+            *
+            * In this form we can handle most of the problems in the database.
+            * */
+            throw new NotFoundException("Category id: '"+ id +"' Not Found");
+        }
+
+        if (this.findByName(category.getName()) != null)
+            throw new DuplicateConstraintException("Name category: '"+ category.getName() +"' already exists.");
 
         Category categoryFound = searchCategory.get();
         categoryFound.setName(category.getName());
@@ -68,7 +81,7 @@ public class CategoryService
         Optional<Category> category = this.findById(id);
 
         if(category.isEmpty())
-            return "";
+            throw new NotFoundException("Category id: '"+ id +"' Not Found");
 
         this.categoryRepository.deleteById(id);
 
