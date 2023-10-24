@@ -29,7 +29,12 @@ public class CategoryService
 
     public Optional<Category> findById(Long id)
     {
-        return categoryRepository.findById(id);
+        Optional<Category> category = this.categoryRepository.findById(id);
+
+        if (category.isEmpty() || !(category.isPresent()))
+            throw new NotFoundException("Category with the id: " + id + " not found!");
+
+        return category;
     }
 
     public Category findByName(String name)
@@ -63,11 +68,11 @@ public class CategoryService
             *
             * In this form we can handle most of the problems in the database.
             * */
-            throw new NotFoundException("Category id: '"+ id +"' Not Found");
+            throw new NotFoundException("Category id: '" + id + "' Not Found");
         }
 
         if (this.findByName(category.getName()) != null)
-            throw new DuplicateConstraintException("Name category: '"+ category.getName() +"' already exists.");
+            throw new DuplicateConstraintException("Name category: '" + category.getName() + "' already exists.");
 
         Category categoryFound = searchCategory.get();
         categoryFound.setName(category.getName());
@@ -81,7 +86,7 @@ public class CategoryService
         Optional<Category> category = this.findById(id);
 
         if(category.isEmpty())
-            throw new NotFoundException("Category id: '"+ id +"' Not Found");
+            throw new NotFoundException("Category id: '" + id + "' Not Found");
 
         this.categoryRepository.deleteById(id);
 

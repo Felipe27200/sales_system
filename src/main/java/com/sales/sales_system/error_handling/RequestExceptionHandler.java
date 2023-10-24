@@ -7,6 +7,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,6 +38,20 @@ public class RequestExceptionHandler
             errorMessage = String.format("The value '%s' is not of type '%s'.",
                     offendingValue, requiredType.getName());
         }
+
+        DatabaseErrorsResponse errorsResponse = new DatabaseErrorsResponse();
+
+        errorsResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorsResponse.setMessage(errorMessage);
+
+        // Return an error response.
+        return new ResponseEntity<>(errorsResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleMismatchRequest(HttpMessageNotReadableException exc)
+    {
+        String errorMessage = exc.getMessage();
 
         DatabaseErrorsResponse errorsResponse = new DatabaseErrorsResponse();
 

@@ -1,6 +1,10 @@
 package com.sales.sales_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
 
@@ -15,8 +19,13 @@ public class Product
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @NotBlank(message = "Name of product is required")
     @Column(name = "name", nullable = false)
     private String name;
+
+    @NotNull(message = "Price of product is required")
+    @Min(value = 1)
+
     @Column(name = "price")
     private Integer price;
 
@@ -35,15 +44,22 @@ public class Product
     * that have the @JoinColumn, also but table
     * can have it.
     * */
-    @ManyToOne(fetch = FetchType.LAZY) // Only get the data from one table of the relationship.
+    @ManyToOne() // Only get the data from one table of the relationship.
     @JoinColumn(
         name = "category_id", // name property defines the name of the FK for this entity.
         referencedColumnName = "id", // Name of the primary key in the parent table
         nullable = false
     )
+
+    /*
+    * This make that this reference will be omitted
+    * when the json will be created.
+    * */
+    @JsonBackReference
     private Category category;
 
     @OneToMany(mappedBy = "product")
+    @JsonBackReference
     private Set<Detail> details;
 
     public Product() { }

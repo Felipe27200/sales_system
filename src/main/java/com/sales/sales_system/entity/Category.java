@@ -1,5 +1,7 @@
 package com.sales.sales_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -37,13 +39,26 @@ public class Category
     * Is both entities have the @OneToMany and @ManyToOne,
     * respective.
     * */
-    @OneToMany(mappedBy = "category")
+    @OneToMany(
+        mappedBy = "category",
+        fetch = FetchType.LAZY
+    )
+    /*
+    * It's necessary for avoid the infinite recursion
+    * when it will try to build the json.
+    * */
+    @JsonManagedReference
     private List<Product> products;
 
     public Category() { }
 
     public Category(String name) {
         this(null, name);
+    }
+
+    public Category(Long id)
+    {
+        this(id, "");
     }
 
     public Category(Long id, String name) {
