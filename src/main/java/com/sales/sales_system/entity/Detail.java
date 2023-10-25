@@ -1,5 +1,6 @@
 package com.sales.sales_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class Detail
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
+    // @JsonManagedReference("details")
     private Product product;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receipt_id", referencedColumnName = "id")

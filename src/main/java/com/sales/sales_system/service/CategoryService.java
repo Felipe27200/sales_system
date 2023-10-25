@@ -71,8 +71,7 @@ public class CategoryService
             throw new NotFoundException("Category id: '" + id + "' Not Found");
         }
 
-        if (this.findByName(category.getName()) != null)
-            throw new DuplicateConstraintException("Name category: '" + category.getName() + "' already exists.");
+        this.isUniqueName(category.getName(), id);
 
         Category categoryFound = searchCategory.get();
         categoryFound.setName(category.getName());
@@ -100,4 +99,17 @@ public class CategoryService
         return categories;
     }
 
+    public void isUniqueName(String name)
+    {
+        if (this.findByName(name) != null)
+            throw new DuplicateConstraintException("The category '" + name + "' already exists.");
+    }
+
+    public void isUniqueName(String name, Long id)
+    {
+        Category category = this.findByName(name);
+
+        if (category != null && !(category.getId().equals(id)))
+            throw new DuplicateConstraintException("The category '" + name + "' already exists.");
+    }
 }

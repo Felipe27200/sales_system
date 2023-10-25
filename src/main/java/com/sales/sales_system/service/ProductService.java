@@ -34,10 +34,7 @@ public class ProductService
         Optional<Category> category = this.categoryService.findById(product.getCategory().getId());
         product.setCategory(category.get());
 
-        Product findProduct = this.findProductByName(product.getName());
-
-        if (findProduct != null)
-            throw new DuplicateConstraintException("The name '" + product.getName() + "' already exists");
+        this.isUniqueName(product.getName());
 
         return this.productRepository.save(product);
     }
@@ -64,4 +61,51 @@ public class ProductService
         return this.productRepository.findAll();
     }
 
+    @Transactional
+    public Product updateProduct(Product product, Long id)
+    {
+        this.isUniqueName(product.getName(), id);
+
+        Product productDB = this.findById(id);
+
+        productDB.setCategory(this.findCategory(product.getCategory().getId()));
+        productDB.setName(product.getName());
+        productDB.setPrice(product.getPrice());
+
+        return this.productRepository.save(productDB);
+    }
+
+    @Transactional
+    public Product deleteProduct(Long id)
+    {
+        Product product = this.findById(id);
+
+        this.productRepository.deleteById(id);
+
+        return product;
+    }
+
+    public Category findCategory(Long id)
+    {
+        Optional<Category> category = this.categoryService.findById(id);
+
+        if (category.isPresent())
+            return category.get();
+        else
+           return null;
+    }
+
+    public void isUniqueName(String name)
+    {
+        if (this.findProductByName(name) != null)
+            throw new DuplicateConstraintException("The name: " + name + " already exists.");
+    }
+
+    public void isUniqueName(String name, Long id)
+    {
+        Product product = this.findProductByName(name);
+
+        if (product != null && !(product.getId().equals(id)))
+            throw new DuplicateConstraintException("The name: " + name + " already exists.");
+    }
 }

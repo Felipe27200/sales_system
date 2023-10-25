@@ -32,7 +32,10 @@ public class ProductController
 
         Product newProduct = this.productService.saveProduct(product);
 
-        return new Response<>(newProduct, "successful");
+        if (newProduct != null)
+            return new Response<>(newProduct, "successful");
+        else
+            return new Response<>("Product create failed", "unsuccessful");
     }
 
     @GetMapping("/products")
@@ -45,5 +48,30 @@ public class ProductController
     public Response<?> findById(@PathVariable Long id)
     {
         return new Response<>(this.productService.findById(id), "successful");
+    }
+
+    @PutMapping("/products/{id}")
+    public Response<?> updateProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long id)
+    {
+        Product product = modelMapper.map(productDTO, Product.class);
+        product.setCategory(new Category(productDTO.getCategory_id()));
+
+        Product productUpdated = this.productService.updateProduct(product, id);
+
+        if (productUpdated != null)
+            return new Response<>(productUpdated, "successful");
+        else
+            return new Response<>("Product update failed", "unsuccessful");
+    }
+
+    @DeleteMapping("/products/{id}")
+    public Response<?> deleteProduct(@PathVariable Long id)
+    {
+        Product product = this.productService.deleteProduct(id);
+
+        if (product == null)
+            return new Response<>("Delete product failed", "unsuccessful");
+        else
+            return new Response<>("The product: " + product.getName() + " was deleted", "successful");
     }
 }
