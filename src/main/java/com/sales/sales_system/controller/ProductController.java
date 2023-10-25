@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController()
 @RequestMapping(path = "/api")
 public class ProductController
@@ -48,6 +50,12 @@ public class ProductController
     public Response<?> findById(@PathVariable Long id)
     {
         return new Response<>(this.productService.findById(id), "successful");
+    }
+
+    @GetMapping("/products/{id}/category")
+    public Response<?> findProductsByCategory(@PathVariable Long id)
+    {
+        return new Response<>(this.productService.findProductsByCategory(id), "successful");
     }
 
     @PutMapping("/products/{id}")

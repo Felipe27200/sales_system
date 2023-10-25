@@ -95,6 +95,18 @@ public class ProductService
            return null;
     }
 
+    public List<Product> findProductsByCategory(Long id)
+    {
+        Category category = this.findCategory(id);
+
+        if (category == null)
+            throw new NotFoundException("Category with the id '" + id + "' NOT FOUND");
+
+        List<Product> products = this.productRepository.findProductByCategory_id(id);
+
+        return products;
+    }
+
     public void isUniqueName(String name)
     {
         if (this.findProductByName(name) != null)
