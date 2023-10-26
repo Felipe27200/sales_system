@@ -1,6 +1,7 @@
 package com.sales.sales_system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
@@ -13,25 +14,23 @@ public class Role
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+    @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private List<Customer> customers;
-
     public Role() { }
 
-    public Role(int id, String name) {
+    public Role(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -41,13 +40,5 @@ public class Role
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Customer> getCustomers() {
-        return customers;
-    }
-
-    public void setCustomers(List<Customer> customers) {
-        this.customers = customers;
     }
 }

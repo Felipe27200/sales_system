@@ -28,10 +28,7 @@ public class Customer
     @Column(name = "user", nullable = false)
     private String user;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
@@ -52,7 +49,6 @@ public class Customer
         this.phone = phone;
         this.password = password;
         this.user = user;
-        this.orders = orders;
     }
 
     public Long getId() {
@@ -85,14 +81,6 @@ public class Customer
 
     public void setPhone(int phone) {
         this.phone = phone;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     public String getPassword() {

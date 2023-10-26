@@ -41,6 +41,9 @@ public class Product
     * The owning side is defined by the entity
     * that have the @JoinColumn, also but table
     * can have it.
+    *
+    * If the relationship is unidirectional
+    * is not necessary define the fetch type.
     * */
     @ManyToOne() // Only get the data from one table of the relationship.
     @JoinColumn(
