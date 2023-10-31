@@ -6,7 +6,17 @@ import org.hibernate.annotations.Fetch;
 import java.util.List;
 
 @Entity
-@Table(name = "customers")
+@Table(
+    name = "customers",
+    /*
+    * Define a unique constraint, the name is the name of the unique key
+    * and columNames is for the columns where we will apply the constraint.
+    * */
+    uniqueConstraints = {
+        @UniqueConstraint(name = "customer_document", columnNames = { "document" }),
+        @UniqueConstraint(name = "customer_user", columnNames = { "user" })
+    }
+)
 public class Customer
 {
     @Id
@@ -22,7 +32,7 @@ public class Customer
     @Column(name = "document", nullable = false)
     private Long document;
     @Column(name = "phone", length = 10)
-    private int phone;
+    private Long phone;
     @Column(nullable = false)
     private String password;
     @Column(name = "user", nullable = false)
@@ -34,7 +44,7 @@ public class Customer
 
     public Customer() { }
 
-    public Customer(Long id, String name, Long document, int phone)
+    public Customer(Long id, String name, Long document, Long phone)
     {
         this.id = id;
         this.name = name;
@@ -42,7 +52,7 @@ public class Customer
         this.phone = phone;
     }
 
-    public Customer(Long id, String name, Long document, int phone, String password, String user) {
+    public Customer(Long id, String name, Long document, Long phone, String password, String user) {
         this.id = id;
         this.name = name;
         this.document = document;
@@ -75,11 +85,11 @@ public class Customer
         this.document = document;
     }
 
-    public int getPhone() {
+    public Long getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(Long phone) {
         this.phone = phone;
     }
 

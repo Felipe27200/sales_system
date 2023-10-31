@@ -1,27 +1,55 @@
 package com.sales.sales_system.dto.user;
 
-import com.sales.sales_system.entity.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 public class UserStoreDTO
 {
+    private Long id;
+    @NotBlank
     private String name;
+    @Min(value = 10_000_000)
     private Long document;
-    private int phone;
+    private Long phone;
+    @NotBlank
+    @Size(min = 8)
     private String password;
+    @NotBlank
+    private String confirmPassword;
     private String user;
-    private Long role_id;
+    private Integer role_id;
 
-    public UserStoreDTO(String name, Long document, int phone, String password, String user, Long role_id) {
+    public UserStoreDTO () { }
+
+    public UserStoreDTO(Long id, String name, Long document, Long phone, String password, String confirmPassword, String user, Integer role_id) {
+        this.id = id;
         this.name = name;
         this.document = document;
         this.phone = phone;
         this.password = password;
+        this.confirmPassword = confirmPassword;
         this.user = user;
         this.role_id = role_id;
+    }
+
+    public UserStoreDTO(String name, Long document, Long phone, String password, String confirmPassword, String user, Integer role_id) {
+        this.name = name;
+        this.document = document;
+        this.phone = phone;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.user = user;
+        this.role_id = role_id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -40,11 +68,11 @@ public class UserStoreDTO
         this.document = document;
     }
 
-    public int getPhone() {
+    public Long getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(Long phone) {
         this.phone = phone;
     }
 
@@ -56,6 +84,14 @@ public class UserStoreDTO
         this.password = password;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     public String getUser() {
         return user;
     }
@@ -64,11 +100,11 @@ public class UserStoreDTO
         this.user = user;
     }
 
-    public Long getRole_id() {
+    public Integer getRole_id() {
         return role_id;
     }
 
-    public void setRole_id(Long role_id) {
+    public void setRole_id(Integer role_id) {
         this.role_id = role_id;
     }
 }
