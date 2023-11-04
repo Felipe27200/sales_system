@@ -1,10 +1,14 @@
 package com.sales.sales_system.dto.user;
 
+import com.sales.sales_system.entity.Customer;
 import com.sales.sales_system.entity.Role;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserGetDTO
 {
@@ -72,5 +76,26 @@ public class UserGetDTO
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public static List<UserGetDTO> convertListEntityToListDTO(List<Customer> customers)
+    {
+        List<UserGetDTO> userDtoList = new ArrayList<>();
+
+        for (Customer user : customers)
+        {
+            UserGetDTO userDto = new UserGetDTO();
+
+            userDto.setId(user.getId());
+            userDto.setUser(user.getUser());
+            userDto.setName(user.getName());
+            userDto.setDocument(user.getDocument());
+            userDto.setPhone(user.getPhone());
+            userDto.setRole(user.getRole());
+
+            userDtoList.add(userDto);
+        }
+
+        return userDtoList;
     }
 }
